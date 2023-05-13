@@ -32,5 +32,6 @@ dynamic = ["version"]
 [project.scripts]
 leetcodeCookies = "leetcodeCookies:main"
 
-[tool.setuptools.dynamic]
-version = {attr="leetcodeCookies.VERSION"}
+[tool.setuptools_scm]
+local_scheme = 'no-local-version'
+write_to = 'src/leetcodeCookies/_version.py'
