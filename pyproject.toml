@@ -1,33 +1,32 @@
 [build-system]
-requires = ["setuptools", "setuptools-scm"]
+requires = ["setuptools >= 68.2", "setuptools-scm >= 8.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "leetcodeCookies"
+authors = [
+  {name = "Wang Kai", email = "kaiwkx@gmail.com"},
+  {name = "Jon Boone", email = "ipmonger@delamancha.org"},
+    ]
 description = "Retrieve leetcode cookies from browser keychains"
 readme = "README.md"
 requires-python = ">=3.10"
-license = { file = "LICENSE" }
-authors = [
-	{name = "Wang Kai", email = "kaiwkx@gmail.com"},
-	{name = "Jon Boone", email = "ipmonger@delamancha.org"},
- 	]
-maintainers = [
-	{name = "Jon Boone", email = "ipmonger@delamancha.org"},
-]
 keywords = [ "browser", "cookies", "leetcode" ]
+license = { file = "LICENSE" }
 classifiers = [
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.10",
 ]
 dependencies = [
-	     "browser_cookie3",
+       "browser_cookie3",
 ]
-
 dynamic = ["version"]
+maintainers = [
+  {name = "Jon Boone", email = "ipmonger@delamancha.org"},
+]
 
 [project.scripts]
 leetcodeCookies = "leetcodeCookies:main"
