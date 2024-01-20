@@ -6,24 +6,17 @@ import sys
 import urllib.parse
 import warnings
 
-VERSION="0.2.0"
+VERSION = "0.2.0"
 
-supported_browsers = [
-    "chrome",
-    "chromium",
-    "brave",
-    "edge", 
-    "firefox",
-    "safari"
-]
+supported_browsers = ["chrome", "chromium", "brave", "edge", "firefox", "safari"]
 
 
-def get_cookie_jar_from_browser(browser: str, domain_name:str):
+def get_cookie_jar_from_browser(browser: str, domain_name: str):
     """
     Create cookie jar from browser filtered on domain_name
     """
     cookie_jar = None
-    
+
     match browser:
         case "chrome":
             cookie_jar = browser_cookie3.chrome(domain_name)
@@ -38,46 +31,54 @@ def get_cookie_jar_from_browser(browser: str, domain_name:str):
         case "safari":
             cookie_jar = browser_cookie3.safari(domain_name)
         case _:
-            error(f'Unsupported browser {browser} requested.')
+            error(f"Unsupported browser {browser} requested.")
 
     return cookie_jar
 
 
-def get_cookie_jar(domain_name:str):
+def get_cookie_jar(domain_name: str):
     """
-    Iterate through supported browsers to locate cookies for domain_name
+    Iterate through supported browsers to locate cookies for `domain_name`
+    Return first cookie jar found for `domain_name`
     """
+    browser = None
     cookie_jar = None
-    
+
     for browser in supported_browsers:
-        print(f'Trying to extract cookie for {domain_name} from {browser}')
+        print(f"Checking for {domain_name} cookies in {browser}")
         try:
-            cookie_jar = get_cookie_jar_from_browser(browser, domain)
+            cookie_jar = get_cookie_jar_from_browser(browser, domain_name)
             break
         except Exception as e:
-            warnings.warn(f'{e}: extracting cookie from {browser} failed')
+            warnings.warn(
+                f"{e}: couldn't obtain cookie jar from {browser} for {domain_name}"
+            )
 
-    print(f'Obtained cookie_jar {cookie_jar} for {domain_name} from {browser}')
+    print(f"{cookie_jar} for {domain_name} found in {browser}")
 
     return cookie_jar
-    
 
-def main(url="https://leetcode.com"):
+
+def main(url):
     """
     Print cookies.
     """
 
     url_components = urllib.parse.urlsplit(url)
 
-    print(f'From {url} we have:\n scheme = {url_components.scheme}\n \
-    netloc = {url_components.netloc}\n hostname = {url_components.hostname}\n \
-    port = {url_components.port}\n path = {url_components.path}\n \
-    query = {url_components.query}\n')
-    
+    print(
+        f"From {url} we have:\n scheme = {url_components.scheme}\n \
+         netloc = {url_components.netloc}\n hostname = {url_components.hostname}\n \
+         port = {url_components.port}\n path = {url_components.path}\n \
+         query = {url_components.query}\n"
+    )
+
     cookie_jar = get_cookie_jar(url_components.hostname)
 
     if cookie_jar is not None:
         r = requests.get(url, cookies=cookie_jar)
+    else:
+        sys.exit(f"Unable to locate cookies for {url_components.hostname}")
 
     leetcode_cookies = list(
         filter(lambda c: c.name in ("LEETCODE_SESSION", "csrftoken"), cookie_jar)
@@ -92,6 +93,7 @@ def main(url="https://leetcode.com"):
     for c in leetcode_cookies:
         print(c.name, c.value)
 
-        
+
 if __name__ == "__main__":
-    main(sys.args[1])
+    print(f"sys.argv == {sys.argv}\n")
+    main(sys.argv[1])

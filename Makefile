@@ -19,9 +19,8 @@ install:
 	pip install -e .
 
 run:
-	@~/.virtualenvs/dev_env/bin/my_cookies
+	@~/leetcodeCookes
 
 
 upload:
 	@twine upload --verbose dist/*
-
