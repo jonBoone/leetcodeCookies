@@ -59,7 +59,7 @@ def get_cookie_jar(domain_name: str):
     return cookie_jar
 
 
-def main(url):
+def main(url="https://leetcode.com"):
     """
     Print cookies.
     """
